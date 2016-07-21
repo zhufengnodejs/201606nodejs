@@ -1,5 +1,5 @@
 function double(val){
-    return function(next){
+    return function(next){//当异步任务完成后会把返回值赋给next
         setTimeout(function(){next(val*val);},1000)
     }
 }
