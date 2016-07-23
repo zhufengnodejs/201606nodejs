@@ -10,8 +10,9 @@ var app = function(req,res){
   }
   res.end(`Cannot ${method} ${pathname}`);
 }
+app.router = [];//里面存放着所有的路由配置项
 function express(){
-    app.router = [];//里面存放着所有的路由配置项
+
     return app;
 }
 //循环所有的方法，给app增加这些方法名同名的属性
