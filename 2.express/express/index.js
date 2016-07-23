@@ -10,19 +10,31 @@
   }
   res.end(`Cannot ${method} ${pathname}`);
 }*/
-
+var url = require('url');
+//是一个监听函数 请求和响应
 var app = function(req,res){
     var method = req.method.toLowerCase();//获取请求的方法
-    var pathname = require('url').parse(req.url,true).pathname;
-    var index =0;
+    var urlObj = url.parse(req.url,true);
+    var pathname = urlObj.pathname;//请求的路径
+    //获取主机名
+    req.hostname = req.headers['host'].split(':')[0];
+    //得到路径名
+    req.path = pathname;
+    //取得查询字符串对象
+    req.query = urlObj.query;
+    var index =0;//定义当前迭代的路由索引
     function next(err){
-        var route = app.router[index++];
-        var routeMethod = route.method;
+        if(index>=app.router.length){
+            return res.end('Not Found');
+        }
+        var route = app.router[index++];//取出当前的路由配置项
+        var routeMethod = route.method;//取出路由配置项方法名
         if(err){
+            //交由错误处理中间件来处理
             if(routeMethod == 'all' && route.fn.length == 4){
                 route.fn(err,req,res,next);
             }else{//如果不是中间件或者 不是错误 处理中间件
-                next(err);
+                next(err);//跳过正常的中间件和路由
             }
         }else{
             if(routeMethod == 'all'){//表示中间件配置
@@ -39,13 +51,11 @@ var app = function(req,res){
                 }
             }
         }
-
-
     }
     next();
 }
 
-app.router = [];//里面存放着所有的路由配置项
+app.router = [];//里面存放着所有的路由配置项 {method,path,fn}
 function express(){
     return app;
 };
@@ -73,8 +83,8 @@ app.use = function(path,fn){
     app.router.push({method:'all',path:path,fn:fn});
 }
 
-app.listen = function(){
-    require('http').createServer(app).listen(3000);
+app.listen = function(port){
+    require('http').createServer(app).listen(port);
 }
 
 module.exports = express;
