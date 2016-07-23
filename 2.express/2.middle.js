@@ -17,6 +17,10 @@ app.use('/hello',function(req,res,next){
 app.get('/hello',function(req,res){
     res.end('hello');
 });
+
+app.use(function(req,res, next){
+    res.end('404');
+});
 //错误处理中间件多了一个参数 err
 app.use(function(err,req,res,next){
     console.log(err);
