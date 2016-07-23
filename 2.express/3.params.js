@@ -19,11 +19,17 @@ app.get('/',function(req,res){
 app.get(/books\/\w+/,function(req,res){
     res.end('bookId:');
 });
-// /users/200/zfpx
+
+var users = [{id:1,name:'zfpx1'},{id:2,name:'zfpx2'}];
+//通过ID得到对应的用户对象
+// /users/1
 // params默认是一个空对象，它的属性来自于路径配置
-app.get('/users/:id/:name',function(req,res){
-  c(req.params.id,req.params.name);
-  res.end('id:'+req.params.id);
+app.get('/users/:id',function(req,res){
+  var id = req.params.id;
+  var user = users.find(function(item){
+        return item.id == id;
+  })
+  res.end(JSON.stringify(user));
 });
 
 app.listen(9090);
