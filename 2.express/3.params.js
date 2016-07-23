@@ -2,7 +2,7 @@ var c = console.log;
 /**
  * 在服务器端接收客户端的参数
  */
-var express = require('./bak');
+var express = require('./express/bak');
 var app = express();
 
 app.get('/',function(req,res){
@@ -19,7 +19,8 @@ var users = [{id:1,name:'zfpx1'},{id:2,name:'zfpx2'}];
 //通过ID得到对应的用户对象
 // /users/1
 // params默认是一个空对象，它的属性来自于路径配置
-app.get('/users/:id',function(req,res){
+app.get('/users/:id/:name',function(req,res){
+    console.log(req.params);
   var id = req.params.id;
   var user = users.find(function(item){
         return item.id == id;

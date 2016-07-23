@@ -44,11 +44,30 @@ var app = function(req,res){
                     next();
                 }
             }else{
-                if(pathname == route.path || route.path == '*'){
-                    route.fn(req,res);
+                //普通路由
+                var paraNames = route.paraNames;
+                if(paraNames){
+                    var matched = pathname.match(route.path);
+                    console.log(matched);
+                    if(matched){
+                        var params = {};
+                        var paraNames = route.paraNames;
+                        for(var i=0;i<paraNames.length;i++){
+                            params[paraNames[i]] = matched[i+1];
+                        }
+                        req.params = params;
+                        route.fn(req,res);
+                    }else{
+                        next();
+                    }
                 }else{
-                    next();
+                    if(pathname == route.path || route.path == '*'){
+                        route.fn(req,res);
+                    }else{
+                        next();
+                    }
                 }
+
             }
         }
     }
@@ -63,8 +82,19 @@ function express(){
 //循环所有的方法，给app增加这些方法名同名的属性
 ['get','post','put','delete','option','patch'].forEach(function(method){
     app[method] = function(path,fn){
+        var config = {method:method,path:path,fn:fn};
+        if(path.includes(':')){
+            var paraNames = [];
+            path = path.replace(/:(\w+)/g,function(matched,group){
+                paraNames.push(group);
+                return '(\\w+)';
+            });
+            config.paraNames = paraNames;
+            config.path = new RegExp(path);
+            console.log(config);
+        }
         //请求的方法 请求的路径 和监听回调函数
-        app.router.push({method:method,path:path,fn:fn});
+        app.router.push(config);
     }
 });
 //配置所有的方法,相同的路径返回相同内容
