@@ -2,7 +2,7 @@ var c = console.log;
 /**
  * 在服务器端接收客户端的参数
  */
-var express = require('express');
+var express = require('./bak');
 var app = express();
 
 app.get('/',function(req,res){
@@ -13,11 +13,6 @@ app.get('/',function(req,res){
     c(req.path);
     c(req.query);
     res.end(req.hostname+req.path);
-});
-//路径参数 /books/200
-// //books/\w+/
-app.get(/books\/\w+/,function(req,res){
-    res.end('bookId:');
 });
 
 var users = [{id:1,name:'zfpx1'},{id:2,name:'zfpx2'}];
