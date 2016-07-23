@@ -15,22 +15,31 @@ var app = function(req,res){
     var method = req.method.toLowerCase();//获取请求的方法
     var pathname = require('url').parse(req.url,true).pathname;
     var index =0;
-    function next(){
+    function next(err){
         var route = app.router[index++];
         var routeMethod = route.method;
-        if(routeMethod == 'all'){//表示中间件配置
-            if(pathname == route.path || route.path == '*'){//如果请求路径和当前路由配置的路径相同
-                route.fn(req,res,next);//执行此中间件函数
-            }else{
-                next();
+        if(err){
+            if(routeMethod == 'all' && route.fn.length == 4){
+                route.fn(err,req,res,next);
+            }else{//如果不是中间件或者 不是错误 处理中间件
+                next(err);
             }
         }else{
-            if(pathname == route.path || route.path == '*'){
-                route.fn(req,res);
+            if(routeMethod == 'all'){//表示中间件配置
+                if(pathname == route.path || route.path == '*'){//如果请求路径和当前路由配置的路径相同
+                    route.fn(req,res,next);//执行此中间件函数
+                }else{
+                    next();
+                }
             }else{
-                next();
+                if(pathname == route.path || route.path == '*'){
+                    route.fn(req,res);
+                }else{
+                    next();
+                }
             }
         }
+
 
     }
     next();
@@ -39,7 +48,8 @@ var app = function(req,res){
 app.router = [];//里面存放着所有的路由配置项
 function express(){
     return app;
-}
+};
+
 //循环所有的方法，给app增加这些方法名同名的属性
 ['get','post','put','delete','option','patch'].forEach(function(method){
     app[method] = function(path,fn){
