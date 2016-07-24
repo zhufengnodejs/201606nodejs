@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 app.use(require('cookie-parser')());
-var sessions = {};
+var sessions = {};//存放着所有的顾客sessoin的窗口
 const SESSION_KEY = 'connect.sid';
 app.get('/visit',function(req,res){
     var cardNo = req.cookies[SESSION_KEY];// 把请求头中的cookie字段转成对象
