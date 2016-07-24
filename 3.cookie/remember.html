@@ -5,14 +5,16 @@
     <title>Title</title>
 </head>
 <body>
-用户名:<input type="text" id="username"><br/>
-密码:<input type="text" id="password"><br/>
-<input type="button" value="登录" onclick="login()">
+<form id="userform" action="/login" method="post">
+用户名:<input type="text" name="username" id="username"><br/>
+密码:<input type="text" name="password" id="password"><br/>
+<input type="submit" value="登录" >
+</form>
 </body>
 <script>
-    window.setCookie = function(name,value){
+   /* window.setCookie = function(name,value){
         document.cookie = name + '=' + value;
-    }
+    }*/
     window.getCookie = function(name){
         var cookie = document.cookie;// name=zfpx; age=7
         var item = cookie.split('; ').map(item=>{
@@ -23,14 +25,14 @@
         });
         return item?item.value:null;
     }
-    window.login = function(){
+  /*  window.login = function(){
         var username = document.querySelector('#username').value;
         var password = document.querySelector('#password').value;
 
-        setCookie('username',username);
-        setCookie('password',password);
+      /!*  setCookie('username',username);
+        setCookie('password',password);*!/
         //也登陆
-    }
+    }*/
     window.onload = function(){
         var username = getCookie('username');//从cookie中获取用户名
         var password = getCookie('password');//从cookie中获取密码
@@ -39,6 +41,7 @@
             document.querySelector('#username').value=username;
             document.querySelector('#password').value=password;
             //自动登陆
+            document.querySelector('#userform').submit();
         }
     }
 </script>
