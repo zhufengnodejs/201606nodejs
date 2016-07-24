@@ -20,7 +20,6 @@ app.get('/login',function(req,res){
 
 app.post('/login',function(req,res){
     var user = req.body;
-    console.log(users);
     var existUser = users.find((item)=>{
         return item.username == user.username && item.password == user.password;
     })
