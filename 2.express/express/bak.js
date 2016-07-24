@@ -46,9 +46,9 @@ var app = function(req,res){
             }else{
                 //普通路由
                 var paraNames = route.paraNames;
-                if(paraNames){
+                if(paraNames.length>0){
+                    // /users/(\w+)/(\w+)
                     var matched = pathname.match(route.path);
-                    console.log(matched);
                     if(matched){
                         var params = {};
                         var paraNames = route.paraNames;
@@ -85,13 +85,13 @@ function express(){
         var config = {method:method,path:path,fn:fn};
         if(path.includes(':')){
             var paraNames = [];
+            ///users/:id/hello/:name => /users/(\w+)/(\w+)
             path = path.replace(/:(\w+)/g,function(matched,group){
                 paraNames.push(group);
                 return '(\\w+)';
             });
             config.paraNames = paraNames;
             config.path = new RegExp(path);
-            console.log(config);
         }
         //请求的方法 请求的路径 和监听回调函数
         app.router.push(config);

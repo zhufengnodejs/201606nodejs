@@ -1,17 +1,9 @@
 
-
-var path = '/users/:id/:name';
-path = path.replace('/','\/');
-
-var groups = path.match(/:(\w+)/);
-
-console.log(groups);
-path = path.replace(/:\w+/g,'(\\w+)');
+var path = '/users/:id/hello/:name'.replace(/:\w+/g,'(\\w+)');
 console.log(path);
 
 var regex = new RegExp(path);
-console.log(regex);
-var url = '/users/1/zfpx';
+var url = '/users/1/hello/zfpx';
 var res = url.match(regex);
 console.log(res);
 

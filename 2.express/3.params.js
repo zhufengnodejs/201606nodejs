@@ -19,7 +19,7 @@ var users = [{id:1,name:'zfpx1'},{id:2,name:'zfpx2'}];
 //通过ID得到对应的用户对象
 // /users/1
 // params默认是一个空对象，它的属性来自于路径配置
-app.get('/users/:id/:name',function(req,res){
+app.get('/users/:id/:name/hello/:age',function(req,res){
     console.log(req.params);
   var id = req.params.id;
   var user = users.find(function(item){

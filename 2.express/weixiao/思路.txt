@@ -1,0 +1,17 @@
+准备部分：
+我把url的path部分分成基本路径和params部分，
+例如：localhost:3000/index/:id/:name
+      localhost:3000/index/1/2
+      其中“localhost:3000/index”--基本路径
+      “/:id/:name” =》 “/1/2” --params部分
+
+
+params的实现思路：
+（1）方法定义时，判断是否有params部分，有的话，保存基本路径和给数组params赋值，没有赋初值为[]
+（2）app函数，首先判断route.params.length == 0?
+   （2-1） =0 正常匹配
+   （2-2）!=0 表示有params部分，
+        （2-2-1）先匹配基本路径，
+        （2-2-2）取出在req.path中去除基本路径后的部分，再用正则/\/(\w+)/g去匹配，匹配到一个给对象增加一个键值对（键在数组route.params中取，值为匹配到的小正则内容），
+        （2-2-3）完成后比较增加的键值对个数和route.params.length是否相等，相等则匹配成功，执行处理函数，不成功next()，遍历数组app.router的下一项
+
