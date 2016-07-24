@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+用户名:<input type="text" id="username"><br/>
+密码:<input type="text" id="password"><br/>
+<input type="button" value="登录" onclick="login()">
+</body>
+<script>
+    window.setCookie = function(name,value){
+        document.cookie = name + '=' + value;
+    }
+    window.getCookie = function(name){
+        var cookie = document.cookie;// name=zfpx; age=7
+        var item = cookie.split('; ').map(item=>{
+            var vals = item.split('=');
+            return {name:vals[0],value:vals[1]};
+        }).find(function(item){
+            return item.name== name;
+        });
+        return item?item.value:null;
+    }
+    window.login = function(){
+        var username = document.querySelector('#username').value;
+        var password = document.querySelector('#password').value;
+
+        setCookie('username',username);
+        setCookie('password',password);
+        //也登陆
+    }
+    window.onload = function(){
+        var username = getCookie('username');//从cookie中获取用户名
+        var password = getCookie('password');//从cookie中获取密码
+        console.log(username,password);
+        if(username){
+            document.querySelector('#username').value=username;
+            document.querySelector('#password').value=password;
+            //自动登陆
+        }
+    }
+</script>
+</html>
