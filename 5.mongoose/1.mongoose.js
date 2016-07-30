@@ -3,10 +3,36 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/201606blog');
 //定义一个模型骨架，它不能直接操作数据库
 var PersonSchema = new mongoose.Schema({
-    name:String,
-    age:Number,
-    birthday:Date
+    name:{
+        type:String,
+        required:true
+    },
+    age:{
+        type:Number,
+        min:0,
+        max:600
+    },
+    gender:{
+        type:String,
+        enum:['男','女']
+    },
+    home:String,
+    birthday:{type:Date,required:true,default:Date.now}
     //如果你想固定下来集合的名称，需要加这样一个参数
+});
+//保存前执行一个中间件
+/*PersonSchema.pre('save',function(next){
+    setTimeout(()=>{
+        this.age = this.age * 2;//this 指向 entity
+        next();
+    },5000)
+});*/
+PersonSchema.pre('save',function(next,done){
+    next();
+    setTimeout(()=>{
+        console.log('保存实体',this);
+        done();
+    },5000);
 });
 //增加entity方法
 PersonSchema.methods.findSameAge = function(cb){
@@ -39,8 +65,10 @@ console.log(PersonModel === p2);*/
 //实体是集合中的一个文件
 var PersonEntity = new PersonModel({
     name:'zfpx',
-    age:8,
-    birthday:new Date(Date.now() - 1000 * 60 * 60 *24 *365 *8)
+    age:20,
+    gender:'男',
+    home:'北京',
+    //birthday:new Date(Date.now() - 1000 * 60 * 60 *24 *365 *8)
 });
 
 
