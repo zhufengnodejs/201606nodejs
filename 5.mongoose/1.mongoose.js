@@ -20,20 +20,27 @@ var PersonSchema = new mongoose.Schema({
     birthday:{type:Date,required:true,default:Date.now}
     //如果你想固定下来集合的名称，需要加这样一个参数
 });
+
+PersonSchema.pre('save',function(next,done){
+    console.log('1.pre');
+    next();
+    setTimeout(()=>{
+        console.log('3.pre');
+        //console.log('保存实体',this);
+        done();//用来标识任务已经完成
+    },5000);
+});
+
 //保存前执行一个中间件
-/*PersonSchema.pre('save',function(next){
+PersonSchema.pre('save',function(next){
+    console.log('2.pre');
     setTimeout(()=>{
         this.age = this.age * 2;//this 指向 entity
         next();
     },5000)
-});*/
-PersonSchema.pre('save',function(next,done){
-    next();
-    setTimeout(()=>{
-        console.log('保存实体',this);
-        done();
-    },5000);
 });
+
+
 //增加entity方法
 PersonSchema.methods.findSameAge = function(cb){
     //先获取模型 再调用find 把条件传入，调用回调
@@ -64,7 +71,7 @@ console.log(PersonModel === p2);*/
 //传入要保存到集合中的文档
 //实体是集合中的一个文件
 var PersonEntity = new PersonModel({
-    name:'zfpx',
+    name:'zfpx100',
     age:20,
     gender:'男',
     home:'北京',
@@ -72,16 +79,17 @@ var PersonEntity = new PersonModel({
 });
 
 
-console.log(PersonEntity.name,PersonEntity.age,PersonEntity.birthday);
+/*console.log(PersonEntity.name,PersonEntity.age,PersonEntity.birthday);*/
 //异步保存数据库，保存成功之后调用回调函数
 PersonEntity.save(function(err,doc){
   if(err){
       console.error(err);
   }else{
+      console.log('5. well done');
       console.log(doc);
       //凡是从数据库里查出来的对象都是entity
-      doc.findSameAge(function(err,docs){
+     /* doc.findSameAge(function(err,docs){
           console.log(docs.length);
-      })
+      })*/
   }
 });
