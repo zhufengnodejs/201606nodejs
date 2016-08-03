@@ -15,5 +15,8 @@ Promise.prototype.then = function(onSuccess,onFail){
     this.fail = onFail; //失败回调
 }
 
+Promise.prototype.catch = function(onFail){
+    this.fail = onFail; //失败回调
+}
 
 module.exports = Promise;
