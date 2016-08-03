@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script>
+    function ajax(url){
+        return new Promise(function(resolve,reject){
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET',url,true);
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState == 4  && /2\d{2}/.test(xhr.status)){
+                    resolve(xhr.responseText);
+                }
+            }
+            xhr.send();
+        });
+    }
+    //链式调用 手机号->QQ号->微信号->基本信息
+    ajax('/getQQByPhone?phone=18910092296')
+    .then(function(data){
+        return ajax('/getWeixinByQQ?qq='+data);
+    })
+    .then(function(data){
+        return ajax('/getNameByWeixin?weixin='+data);
+    })
+    .then(function(data){
+        console.log(data);
+    });
+</script>
+</html>
