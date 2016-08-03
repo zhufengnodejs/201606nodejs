@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>运动</title>
+    <style>
+        .ball{
+            width:100px;
+            height:100px;
+            border-radius: 50px;
+        }
+        .ball1{
+            background-color:red;
+        }
+        .ball2{
+            background-color:yellow;
+        }
+        .ball3{
+            background-color:blue;
+        }
+    </style>
+</head>
+<body>
+<div class="ball ball1" id="ball1" style="margin-left: 0px"></div>
+<div class="ball ball2" id="ball2" style="margin-left: 0px"></div>
+<div class="ball ball3" id="ball3" style="margin-left: 0px"></div>
+</body>
+<script>
+    //定义一个移动小球的方法 ele 移动的对象 target 目标位置 cb移动完成之后的回调
+    function move(element,target,cb){
+      setTimeout(function(){
+          //取得现在距离 左边的位置
+         var marginLeft = parseInt(element.style.marginLeft,10);
+         if(marginLeft == target){
+             cb && cb();
+         } else{
+             //向右移动
+             element.style.marginLeft = (marginLeft+1)+'px';
+             move(element,target,cb);
+         }
+      },13)
+    }
+    var ball1 = document.querySelector('#ball1');
+    var ball2 = document.querySelector('#ball2');
+    var ball3 = document.querySelector('#ball3');
+    move(ball1,100,function(){
+        move(ball2,100,function(){
+            move(ball2,100);
+        });
+    });
+</script>
+</html>

@@ -8,9 +8,9 @@ var CourseSchema = new mongoose.Schema({
 //定义课程Model
 var CourseModel = mongoose.model('Course',CourseSchema);
 /*CourseModel.create([
-    {name:'node.js'},
-    {name:'化学'}
-]);*/
+ {name:'node.js'},
+ {name:'化学'}
+ ]);*/
 
 //定义一个模型骨架，它不能直接操作数据库
 var PersonSchema = new mongoose.Schema({
@@ -41,50 +41,54 @@ var PersonSchema = new mongoose.Schema({
 
 var PersonModel = mongoose.model('Person',PersonSchema);
 /*PersonModel.create({
-    name:'zfpx',
-    age:8,
-    gender:'男',
-    home:'北京',
-    hobby:['smoking'],
-    course:'579c52174c60d0041106695d'
-});*/
+ name:'zfpx',
+ age:8,
+ gender:'男',
+ home:'北京',
+ hobby:['smoking'],
+ course:'579c52174c60d0041106695d'
+ });*/
 // populate 把外键变成外键对应对象
 /*PersonModel.findOne({}).populate('course').exec(function(err,doc){
-    console.log(doc);
-});*/
+ console.log(doc);
+ });*/
 /*
-PersonModel.findOne({},function(err,doc){
-    console.log(doc.course);
-    CourseModel.findById(doc.course,function(err,course){
-        console.log(course);
-        doc.course = course.name;
-        console.log(doc);
-    })
-})*/
+ PersonModel.findOne({},function(err,doc){
+ console.log(doc.course);
+ CourseModel.findById(doc.course,function(err,course){
+ console.log(course);
+ doc.course = course.name;
+ console.log(doc);
+ })
+ })*/
 // version版本号 实现并发控制的
 
 //1, 579c579dddc60a201be97eab
 // 增加一个爱好 年龄累加1 名字改了
 /*PersonModel.update({_id:'579c579dddc60a201be97eab'},
-    {$push:{hobby:'drinking'}},
-    function(err,result){
-        if(err)
-            console.error(err);
-        else
-            console.log(result);
-    }
-);*/
+ {$push:{hobby:'drinking'}},
+ function(err,result){
+ if(err)
+ console.error(err);
+ else
+ console.log(result);
+ }
+ );*/
 PersonModel.findById('579c579dddc60a201be97eab',function(err,doc){
-      //entity 单个文档对象
-      //当你去修改数组的时候会增加
-      // doc.__v = 4;
-      doc.age = doc.age+1;
-      doc.name = 'zfpx3';
-      doc.hobby.push('aaa');
-      setTimeout(function(){
-          doc.save(function(err,result){
-              console.log(err);
-              console.log(result);
-          });
-      },5000)
+    //entity 单个文档对象
+    //当你去修改数组的时候会增加
+    // doc.__v = 4;
+    doc.age = doc.age+1;
+    doc.name = 'zfpx3';
+    doc.hobby.push('bbb');
+    doc.save(function(err,result){
+        console.log(err);
+        console.log(result);
+        setTimeout(function(){
+            doc.save(function(err,result){
+                console.log(err);
+                console.log(result);
+            });
+        },10000)
+    });
 })
