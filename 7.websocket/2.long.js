@@ -10,6 +10,7 @@ app.use(bodyParser.json());
  * 去的时候带着当前的价格
  * 业务员到了菜市场，开始观察，如果观察到价格变动了，就回来报告，如果没变化，就等着
  */
+//菜市场的当前价格
 var currentPrice = '' + (Math.random() * 10);
 setInterval(function(){
     currentPrice = '' + (Math.random() * 10);
