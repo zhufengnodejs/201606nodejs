@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>客户端</title>
+</head>
+<body>
+
+</body>
+<script>
+   window.onload = function(){
+       var socket = new WebSocket('ws://localhost:9090');
+       socket.onopen = function(){
+           console.log('连接已经建立');
+           socket.send('服务器你不好');
+       }
+       //监听消息
+       socket.onmessage = function(event){
+           //通过event.data 获取消息体
+           console.log(event.data);
+       }
+   }
+
+</script>
+</html>
