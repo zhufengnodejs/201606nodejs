@@ -19,10 +19,11 @@ setInterval(function(){
 app.post('/price', function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:63342');
     var originalPrice = req.body.price;
-    setInterval(function () {
+    var timer = setInterval(function () {
         //检查原来的价格跟当前价格的区别，如果不一样
         if(originalPrice != currentPrice){
             res.send(currentPrice);
+            clearInterval(timer);
         }
     }, 1000);
 });
