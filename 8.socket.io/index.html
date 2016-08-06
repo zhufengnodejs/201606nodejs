@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <button class="btn btn-warning" onclick="join('happy')">开心房间</button>
+            <button class="btn btn-danger"  onclick="join('love')">爱心房间</button>
+        </div>
+        <div class="panel-body">
+            <ul class="list-group" id="messages">
+            </ul>
+        </div>
+        <div class="panel-footer">
+            <input id="msg" class="form-control" type="text" onkeyup="publish(event)" >
+        </div>
+    </div>
+</div>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    // http://localhost:9090/
+    // ws://localhost:9090/ = /
+    window.onload = function(){
+        var socket = io.connect('/');
+        socket.on('connect',function(){
+            console.log('connected');
+        });
+        socket.on('disconnect',function(){
+            console.log('disconnect');
+        });
+        socket.on('messages',function(messages){
+            var ul = document.querySelector('#messages');
+            var fragment = document.createDocumentFragment();
+            messages.forEach(function(message){
+                var li = document.createElement('li');
+                li.innerHTML = message;
+                li.className = 'list-group-item';
+                fragment.appendChild(li);
+            });
+            ul.appendChild(fragment);
+        });
+        socket.on('message',function(message){
+            var ul = document.querySelector('#messages');
+            var li = document.createElement('li');
+            li.innerHTML = message;
+            li.className = 'list-group-item';
+            ul.appendChild(li);
+        });
+        window.publish = function(event){
+            var keycode = event.keyCode;
+            if(keycode == 13){
+                var msg = document.querySelector('#msg').value;
+                socket.send(msg);
+                document.querySelector('#msg').value = '';
+            }
+        }
+
+        window.join = function(roomName){
+            // 发射join指令，
+            socket.emit('join',roomName);
+        }
+    }
+</script>
+</html>
