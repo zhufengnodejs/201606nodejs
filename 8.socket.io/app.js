@@ -17,7 +17,6 @@ var io = require('socket.io')(server);
 //监听客户端连接事件
 var messages = [];
 io.on('connection',function(socket){
-   console.log('客户端已经连接');
     var currentRoom;
     //当客户端连接的时候，向此客户端发送全量消息
    socket.emit('messages',messages);
@@ -33,6 +32,9 @@ io.on('connection',function(socket){
 
    });
    socket.on('join',function(roomName){
+       if(currentRoom){
+           socket.leave(currentRoom);
+       }
        socket.join(roomName);
        currentRoom = roomName;
    });
