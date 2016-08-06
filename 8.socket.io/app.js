@@ -15,9 +15,8 @@ var io = require('socket.io')(server);
 io.on('connection',function(socket){
    console.log('客户端已经连接');
    socket.on('message',function(message){
-       console.log(message);
-       //socket.send('确认'+message);
-       socket.emit('message','确认'+message);
+       //通知所有的人
+      io.emit('message',message);
    });
    socket.on('error',function(){
        console.log('客户端错误');
