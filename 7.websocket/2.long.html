@@ -15,10 +15,12 @@
             if (xhr.readyState == 4 && xhr.status == 200) {
                 document.querySelector('#price').innerHTML = xhr.responseText;
                 //只有上次请求返回之后才会发起下一次请求
-                send(document.querySelector('#price').innerHTML);
+                send();
             }
         }
+        //设置请求头中的内容类型
         xhr.setRequestHeader('Content-Type','application/json');
+        //把当前价格作为JSON参数发送给服务器
         xhr.send(JSON.stringify({price:document.querySelector('#price').innerHTML}));
     }
     send();

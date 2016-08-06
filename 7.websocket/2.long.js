@@ -10,12 +10,20 @@ app.use(bodyParser.json());
  * 去的时候带着当前的价格
  * 业务员到了菜市场，开始观察，如果观察到价格变动了，就回来报告，如果没变化，就等着
  */
+var currentPrice = '' + (Math.random() * 10);
+setInterval(function(){
+    currentPrice = '' + (Math.random() * 10);
+},5000);
+//业务员带着当前的价格去客户端询问
 app.post('/price', function (req, res) {
-    console.log(req.body);
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:63342');
-    setTimeout(function () {
-        res.send('' + (Math.random() * 10));
-    }, 3000);
+    var originalPrice = req.body.price;
+    setInterval(function () {
+        //检查原来的价格跟当前价格的区别，如果不一样
+        if(originalPrice != currentPrice){
+            res.send(currentPrice);
+        }
+    }, 1000);
 });
 //当客户端通过跨域向服务器发起post请求
 //客户端会先发一个options请求，用来询问服务端支持的方法名
