@@ -10,15 +10,16 @@
 <script>
     function send() {
         var xhr = new XMLHttpRequest();//0
-        xhr.open('GET', 'http://localhost:9090/price', true);
+        xhr.open('POST', 'http://localhost:9090/price', true);
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 document.querySelector('#price').innerHTML = xhr.responseText;
                 //只有上次请求返回之后才会发起下一次请求
-                send();
+                send(document.querySelector('#price').innerHTML);
             }
         }
-        xhr.send();
+        xhr.setRequestHeader('Content-Type','application/json');
+        xhr.send(JSON.stringify({price:document.querySelector('#price').innerHTML}));
     }
     send();
 </script>
