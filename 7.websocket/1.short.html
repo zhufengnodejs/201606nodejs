@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+苹果的价格:<span id="price"></span>
+</body>
+<script>
+    setInterval(function(){
+        var xhr = new XMLHttpRequest();//0
+        xhr.open('GET','http://localhost:9090/price',true);//1
+        xhr.onreadystatechange = function(){
+            // 0 1 2 3 4
+            if(xhr.readyState == 4 && xhr.status == 200){
+                document.querySelector('#price').innerHTML = xhr.responseText;
+            }
+        }
+        xhr.send();//2
+        //3 开始接收响应的时候
+        //4 响应接收完毕
+    },1000);
+</script>
+</html>

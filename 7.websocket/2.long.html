@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+苹果的价格:<span id="price"></span>
+</body>
+<script>
+    function send() {
+        var xhr = new XMLHttpRequest();//0
+        xhr.open('GET', 'http://localhost:9090/price', true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                document.querySelector('#price').innerHTML = xhr.responseText;
+                //只有上次请求返回之后才会发起下一次请求
+                send();
+            }
+        }
+        xhr.send();
+    }
+    send();
+</script>
+</html>
